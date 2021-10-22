@@ -1,0 +1,18 @@
+[package]
+name = "vanisol"
+version = "0.1.0"
+description = "vanisol"
+edition = "2018"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-client = "0.11.0"
+regex = "0.1.41"
+
+[dependencies.bs58]
+version = "0.4.0"
