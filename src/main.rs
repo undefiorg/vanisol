@@ -28,7 +28,7 @@ pub fn gen_acc(target: &str) {
   println!("secret: {}",secret);
 }
 
-fn gen_pubkey(target: &str) {
+fn gen_pubkey(target: &str, is_regex: bool) {
     let mut pubkey_string = String::from("");
     let mut is_matched = false;
     let mut count = 0;
@@ -40,8 +40,13 @@ fn gen_pubkey(target: &str) {
       pubkey_string = pubkey.to_string();
 
       // Matched?
-      let re = Regex::new(target).unwrap();
-      is_matched = re.is_match(&pubkey_string);
+      if is_regex {
+        let re = Regex::new(target).unwrap();
+        is_matched = re.is_match(&pubkey_string.to_owned());
+      } else {
+        is_matched = pubkey_string.starts_with(target);
+      }
+ 
       count+=1;
   
       print!("\r");
@@ -52,5 +57,6 @@ fn gen_pubkey(target: &str) {
 }
 
 fn main() {
-  gen_pubkey(r"^avar.\w+")
+  // gen_pubkey(r"^avar.\w+", true);
+  gen_pubkey(r"cat", false);
 }

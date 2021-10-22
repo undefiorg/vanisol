@@ -8,4 +8,5 @@ A Solana Chain vanity address generator written in Rust.
 ```shell
 cargo run
 cargo build --release
+./target/release/vanisol
 ```
