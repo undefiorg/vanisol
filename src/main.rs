@@ -1,8 +1,9 @@
 use regex::Regex;
 use solana_sdk::signature::{Keypair, Signer};
+use std::string::String;
 use std::time::Instant;
 
-pub fn gen_acc(target: &str, is_regex: bool) {
+pub fn gen_keypair(target: &str, is_regex: bool) -> (String, String, String) {
     let mut pubkey_string = String::from("");
     let mut is_matched = false;
     let mut count = 0;
@@ -38,7 +39,7 @@ pub fn gen_acc(target: &str, is_regex: bool) {
 
     // Keypair for write to disk = 32+32
     let keypair_bytes = keypair.to_bytes();
-    let keypair_serialize = serde_json::to_string(&keypair_bytes.to_vec()).unwrap();
+    let serialized_keypair = serde_json::to_string(&keypair_bytes.to_vec()).unwrap();
     // println!("{:?}", serialized);
 
     // Secret key string 32
@@ -51,12 +52,13 @@ pub fn gen_acc(target: &str, is_regex: bool) {
     println!("\n------------------------------------------------");
     println!("pubkey: {}", pubkey_string);
     println!("secret: {}", secret_string);
-    println!("keypair: {}", keypair_serialize);
+    println!("keypair: {}", serialized_keypair);
     println!("------------------------------------------------");
 
     // Test
     // let keypair_test = Keypair::from_base58_string(&keypair_base58);
     // println!("\ntest pubkey: {}", keypair_test.pubkey().to_string());
+    (pubkey_string, secret_string, serialized_keypair)
 }
 
 pub fn gen_pubkey(target: &str, is_regex: bool) {
@@ -96,5 +98,19 @@ pub fn gen_pubkey(target: &str, is_regex: bool) {
 fn main() {
     // gen_pubkey(r"^avar.\w+", true);
     // gen_pubkey(r"foo", false);
-    gen_acc(r"test", false);
+    gen_keypair(r"test", false);
+}
+
+#[test]
+fn test_gen_keypair() {
+    let (pubkey_string, secret_string, serialized_keypair) = gen_keypair(r"z", false);
+    assert_eq!(pubkey_string.starts_with("z"), true);
+
+    assert_eq!(secret_string.chars().count(), 88);
+    let keypair_test = Keypair::from_base58_string(&secret_string);
+    assert_eq!(keypair_test.pubkey().to_string(), pubkey_string);
+
+    let bytes: Vec<u8> = serde_json::from_str(&serialized_keypair).unwrap();
+    let dalek_keypair = Keypair::from_bytes(&bytes);
+    assert_eq!(dalek_keypair.unwrap().pubkey().to_string(), pubkey_string);
 }
