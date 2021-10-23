@@ -11,7 +11,7 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-client = "0.11.0"
+solana-sdk = "=1.8.1"
 regex = "0.1.41"
 
 [dependencies.bs58]
