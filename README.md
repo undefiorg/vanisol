@@ -10,3 +10,8 @@ cargo run
 cargo build --release
 ./target/release/vanisol
 ```
+
+## TODO
+- [ ] Add input parameters `.vanisol foo`
+- [ ] Add input parameters `.vanisol --help`
+- [ ] Add input parameters `.vanisol '^foo.\w+' --regxp`

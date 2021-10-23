@@ -1915,6 +1915,7 @@ version = "0.1.0"
 dependencies = [
  "bs58 0.4.0",
  "regex 0.1.80",
+ "serde_json",
  "solana-sdk",
 ]
 
